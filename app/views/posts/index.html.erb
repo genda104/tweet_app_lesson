@@ -1,0 +1,19 @@
+<div class="main posts-index">
+  <div class="container">
+    <!-- @postsに代入されている配列データをeach文で1つずつ変数postに代入し、投稿内容を繰り返し表示させる。 -->
+    <% @posts.each do |post| %>
+      <div class="posts-index-item">
+        <div class="post-left">
+          <img src="<%= "/user_images/#{post.user.image_name}" %>">
+        </div>
+        <div class="post-right">
+          <div class="post-user-name">
+            <%= link_to(post.user.name, "/users/#{post.user.id}") %>
+          </div>
+          <!-- 各投稿の内容の部分をクリックすると詳細ページに移動できる -->
+          <%= link_to(post.content, "/posts/#{post.id}") %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

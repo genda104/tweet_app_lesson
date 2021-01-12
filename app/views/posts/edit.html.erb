@@ -1,0 +1,27 @@
+<div class="main posts-new">
+  <div class="container">
+    <h1 class="form-heading">編集する</h1>
+    <!-- form_tagメソッドを用いると、フォームに入力されたデータを送信することができます。
+    「form_tag(送信先のURL) do」のように送信先のURLを指定します。
+    これによって、<input type="submit" ...>のボタンを押した時に、指定されたURLにデータが送信されます。 -->
+    <%= form_tag("/posts/#{@post.id}/update") do %>
+      <div class="form">
+        <div class="form-body">
+          <!-- saveメソッドを呼び出した際にバリデーションに失敗すると、
+          Railsでは自動的にエラーメッセージが生成されるようになっています。
+          @post.errors.full_messagesの中に、エラー内容が配列で入ります。 -->
+          <% @post.errors.full_messages.each do |message| %>
+            <div class="form-error">
+              <%= message %>
+            </div>
+          <% end %>
+          <!-- フォームのデータをupdateアクションに送信できるように、<textarea>タグにname属性を追加します。
+          editアクションで、URLのidと同じidの投稿データをデータベースから取得し、
+          そのcontentの値（＝投稿の内容）を初期値に設定します。 -->
+          <textarea name="content"><%= @post.content %></textarea>
+          <input type="submit" value="保存">
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

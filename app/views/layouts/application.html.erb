@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TweetAppLesson</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <!--「Font Awesome」を利用するには、<head>タグ内で読み込みをする必要があります。
+    <head>タグなどの共通のHTMLはapplication.html.erbに書きますので、そこに読み込み用の<link>タグを追加します。 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+
+  <body>
+    <header>
+      <div class="header-logo">
+        <% if @current_user %>  <!-- ログイン中 -->
+          <!-- Rails ではlink_toというメソッドを使うと<a>タグを作成することができます。
+          link_to メソッドは Ruby のコードなので、「<%= %>」で囲む必要があります。
+          第一引数に表示する文字を、第二引数に URLを書くことでリンクが作成されます。 -->
+          <%= link_to("TweetApp", "/posts/index") %>
+        <% else %>
+          <%= link_to("TweetApp", "/") %>
+        <% end %>
+      </div>
+      <ul class="header-menus">
+        <% if session[:user_id] %>
+          <li>現在ログイン中のユーザー【<%= User.find(session[:user_id]).name %>】</li>
+        <% end %>
+        <% if @current_user %>  <!-- ログイン中 -->
+          <li>
+            <%= link_to(@current_user.name, "/users/#{@current_user.id}") %>
+          </li>
+          <li>
+            <%= link_to("投稿一覧", "/posts/index") %>
+          </li>
+          <li>
+            <%= link_to("新規投稿", "/posts/new") %>
+          </li>
+          <li>
+            <%= link_to("ユーザー一覧", "/users/index") %>
+          </li>
+          <li>
+            <%= link_to("ログアウト", "/logout", {method: :post}) %>
+          </li>
+        <% else %>
+          <li>
+            <%= link_to("TweetAppとは", "/about") %>
+          </li>
+          <li>
+            <%= link_to("新規登録", "/signup") %>
+          </li>
+          <li>
+            <%= link_to("ログイン", "/login") %>
+          </li>
+        <% end %>
+      </ul>
+    </header>
+
+    <% if flash[:notice] %>
+      <div class="flash">
+        <!-- アクションで変数flash[:notice]に文字列を代入すると、flash[:notice]をビューで使うことができます。
+        変数flashは１度表示された後に自動で削除されるようになっています。
+        flashはいろいろな箇所で共通で使っていくのでapplication.html.erbで表示します。 -->
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+    
+    <!-- 共通のレイアウトの仕組み。
+    「views/layouts/application.html.erb」には＜％＝ yield ％＞というコードがあります。
+    top.html.erbなどの各ビューファイルは、この＜％＝ yield ％＞の部分に代入され、
+    application.html.erbの一部としてブラウザに表示されています。
+    この仕組みによって、ヘッダーなどの共通のレイアウトを1つにまとめることができます。 -->
+    <%= yield %>
+  </body>
+</html>

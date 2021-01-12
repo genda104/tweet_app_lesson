@@ -1,0 +1,19 @@
+<div class="main users-index">
+  <div class="container">
+    <h1 class="users-heading">ユーザー一覧</h1>
+    <% @users.each do |user| %>
+      <div class="users-index-item">
+        <div class="user-left">
+          <!-- ユーザー画像を表示するためには、HTMLの<img>タグを用います。
+          画像はpublic/user_imagesフォルダに保存されているので、src属性の値は「/user_images/ファイル名」とする必要があります。
+          Rubyのコード部分は＜％＝ ％＞で囲む必要があることに注意します。 -->
+          <img src="<%= "/user_images/#{user.image_name}" %>">
+          <!-- Rubyのコードの文法では、＜％＝ image_tag "/user_images/#{user.image_name}" ％＞ -->
+        </div>
+        <div class="user-right">
+          <%= link_to(user.name, "/users/#{user.id}") %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

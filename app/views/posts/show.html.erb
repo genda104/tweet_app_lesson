@@ -1,0 +1,43 @@
+<div class="main posts-show">
+  <div class="container">
+    <div class="posts-show-item">
+      <div class="post-user-name">
+        <!-- Rubyでは#{ }を用いて変数の値を文字列中に表示することができます。 -->
+        <img src="<%= "/user_images/#{@user.image_name}" %>">
+        <%= link_to(@user.name, "/users/#{@user.id}") %>
+      </div>
+      <p>
+        <%= @post.content %>
+      </p>
+      <div class="post-time">
+        <%= @post.created_at %>
+      </div>
+      <!-- 「ログインしているユーザーがその投稿にいいねしたデータが存在する」という条件のために、
+      user_idとpost_idが合致するデータがlikesテーブルに存在するかどうか、find_byを用いてチェックします。
+      （find_byは該当するデータが見つからなかった時にnilを返す） -->
+      <% if Like.find_by(user_id: @current_user.id, post_id: @post.id) %>
+        <!-- HTML要素に対してlink_toメソッドを使うには、少し異なる書き方をする必要があります。
+        ＜％＝ link_to(URL) do ％＞と＜％ end ％＞の間にHTML要素を書くことで、その部分をリンクにすることができます。 -->
+        <%= link_to("/likes/#{@post.id}/destroy", {method: "post"}) do %>
+          <span class="fa fa-heart like-btn-unlike"></span>
+        <% end %>
+      <% else %>
+        <!-- HTML要素に対してlink_toメソッドを使うには、少し異なる書き方をする必要があります。
+        ＜％＝ link_to(URL) do ％＞と＜％ end ％＞の間にHTML要素を書くことで、その部分をリンクにすることができます。 -->
+        <%= link_to("/likes/#{@post.id}/create", {method: "post"}) do %>
+          <span class="fa fa-heart like-btn"></span>
+        <% end %>
+      <% end %>
+      <%= @likes_count %>
+      <!-- ログインしているユーザーの投稿以外の場合には編集・削除リンクを表示しないようにします。 -->
+      <% if @post.user_id == @current_user.id %>
+        <div class="post-menus">
+          <%= link_to("編集", "/posts/#{@post.id}/edit") %>
+          <!-- link_toの第三引数に「{method: "post"}」を追加することで、
+          「post」として定義されているルーティングを探してくれるようになります。 -->
+          <%= link_to("削除", "/posts/#{@post.id}/destroy", {method: "post"}) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
